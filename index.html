@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WolfMind Industries — Rebuilding Domestic Heat Treatment and NDT Capacity</title>
+<meta name="description" content="WolfMind Industries is rebuilding U.S. heat treatment and nondestructive testing capacity with deployable furnaces and radiographic inspection systems. Fort Worth, TX.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wolfmind.io/">
+<meta property="og:title" content="WolfMind Industries">
+<meta property="og:description" content="Rebuilding domestic heat treatment and NDT capacity. Deployable furnaces and radiographic inspection. Fort Worth, TX.">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232D2D2D'/%3E%3Ctext x='50' y='62' font-family='Calibri,sans-serif' font-size='56' font-weight='700' text-anchor='middle' fill='%23FFFFFF'%3EW%3C/text%3E%3C/svg%3E">
+
+<style>
+  :root {
+    --charcoal: #2D2D2D;
+    --warm-gray: #5C5C5C;
+    --amber: #D97706;
+    --cream: #F5F0E6;
+    --slate: #4A5568;
+    --light-gray: #D1D5DB;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: Calibri, 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--warm-gray);
+    background: var(--white);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER BAND ── */
+  .header-band {
+    background: var(--charcoal);
+    padding: 18px clamp(20px, 5vw, 64px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .wordmark {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  .wordmark-sub {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--warm-gray);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .header-tagline {
+    font-size: 13px;
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 64px) clamp(20px, 5vw, 48px);
+  }
+
+  /* ── HERO ── */
+  .hero-number {
+    font-size: clamp(56px, 10vw, 96px);
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .hero-arrow { color: var(--amber); }
+
+  .hero-context {
+    font-size: clamp(14px, 1.8vw, 17px);
+    color: var(--warm-gray);
+    line-height: 1.55;
+    margin-bottom: 18px;
+    max-width: 720px;
+  }
+
+  .positioning {
+    font-size: clamp(17px, 2.2vw, 22px);
+    font-weight: 600;
+    color: var(--charcoal);
+    line-height: 1.4;
+    max-width: 780px;
+    margin-bottom: 28px;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .cta-primary {
+    background: var(--amber);
+    color: var(--white);
+  }
+
+  .cta-primary:hover { background: #B45309; }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--charcoal);
+    border: 2px solid var(--charcoal);
+  }
+
+  .cta-secondary:hover {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  /* ── AMBER RULE ── */
+  .amber-rule {
+    border: none;
+    border-top: 2.5px solid var(--amber);
+    margin: 40px 0 32px;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--light-gray);
+  }
+
+  /* ── TWO-COLUMN SECTIONS (stack on mobile) ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 48px;
+    margin-bottom: 36px;
+  }
+
+  @media (max-width: 720px) {
+    .two-col { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  /* ── BULLET LISTS ── */
+  .bullets {
+    list-style: none;
+    padding: 0;
+  }
+
+  .bullets li {
+    font-size: 14px;
+    color: var(--warm-gray);
+    line-height: 1.55;
+    margin-bottom: 10px;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    background: var(--amber);
+  }
+
+  .bullets li strong {
+    color: var(--charcoal);
+    font-weight: 700;
+  }
+
+  .stat-highlight {
+    color: var(--amber);
+    font-weight: 700;
+  }
+
+  /* ── CORPORATE DATA GRID ── */
+  .data-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 18px;
+    font-size: 13.5px;
+  }
+
+  .data-label {
+    font-weight: 700;
+    color: var(--charcoal);
+    white-space: nowrap;
+  }
+
+  .data-value { color: var(--warm-gray); }
+
+  /* ── EXPERIENCE ── */
+  .experience-intro {
+    font-size: 14px;
+    color: var(--warm-gray);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+
+  .experience .bullets li::before { background: var(--slate); }
+
+  /* ── FOOTER BAND ── */
+  .footer-band {
+    background: var(--charcoal);
+    padding: 22px clamp(20px, 5vw, 64px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .footer-contact {
+    font-size: 13px;
+    color: var(--light-gray);
+    line-height: 1.55;
+  }
+
+  .footer-contact strong {
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .footer-contact a {
+    color: var(--light-gray);
+    text-decoration: none;
+  }
+
+  .footer-contact a:hover { color: var(--amber); }
+
+  .footer-right { text-align: right; }
+
+  .footer-url {
+    font-size: 13px;
+    color: var(--light-gray);
+    letter-spacing: 1px;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--amber);
+    font-style: italic;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="header-band">
+  <div class="header-left">
+    <span class="wordmark">WolfMind</span>
+    <span class="wordmark-sub">Industries</span>
+  </div>
+  <div class="header-tagline">Better. Cheaper. Everywhere.</div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-number">6,150 <span class="hero-arrow">&rarr;</span> 1,750</div>
+    <p class="hero-context">
+      U.S. metalcasting plants since 2000. The heat treaters and inspection facilities that serve them are closing in turn. Twelve in the past year alone.
+    </p>
+    <p class="positioning">
+      WolfMind is rebuilding domestic heat treatment and nondestructive testing capacity with deployable industrial furnaces and radiographic inspection systems.
+    </p>
+    <div class="cta-row">
+      <a class="cta cta-primary" href="/assets/WolfMind_Capability_Statement.pdf">Capability Statement (PDF)</a>
+      <a class="cta cta-secondary" href="mailto:justin@wolfmind.io">Contact</a>
+    </div>
+  </section>
+
+  <hr class="amber-rule">
+
+  <div class="two-col">
+    <section>
+      <h2 class="section-label">Core Competencies</h2>
+      <ul class="bullets">
+        <li><strong>Heat treating of metals</strong> &mdash; aluminum, magnesium, and nickel superalloy thermal processing per AMS 2770/2771</li>
+        <li><strong>Nondestructive testing</strong> &mdash; radiographic inspection, fluorescent penetrant inspection, materials testing (hardness, conductivity, tensile)</li>
+        <li><strong>Radiographic imaging systems</strong> &mdash; commodity X-ray inspection apparatus using scintillator-camera architecture</li>
+        <li><strong>Industrial process furnace manufacturing</strong> &mdash; modular bolt-on panel furnaces designed for field deployment</li>
+        <li><strong>Temperature instrumentation</strong> &mdash; PyroMesh AMS 2750 compliance automation platform</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-label">Differentiators</h2>
+      <ul class="bullets">
+        <li><strong>3rd generation aerospace</strong> &mdash; founded from inside the industry it serves</li>
+        <li><strong><span class="stat-highlight">$1,900</span> imaging chain</strong> &mdash; validated April 2026. Conventional systems start at $150,000. Repeatable cost structure.</li>
+        <li><strong>Born digital</strong> &mdash; tamper-evident hash-chain data provenance from day one, no legacy retrofit</li>
+        <li><strong>Modular deployment</strong> &mdash; furnace panels bolt together on a concrete floor, designed for field assembly</li>
+        <li><strong>Open architecture</strong> &mdash; no proprietary lock-in, standards-compliant outputs</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="two-col">
+    <section>
+      <h2 class="section-label">Corporate Data</h2>
+      <div class="data-grid">
+        <span class="data-label">NAICS:</span>
+        <span class="data-value">332811 (primary), 541380, 333994, 334513, 334519, 541690</span>
+
+        <span class="data-label">CAGE / NCAGE:</span>
+        <span class="data-value">1QT90</span>
+
+        <span class="data-label">UEI:</span>
+        <span class="data-value">QZKLH6NJ6ET7</span>
+
+        <span class="data-label">SBC Control ID:</span>
+        <span class="data-value">SBC_002676341</span>
+
+        <span class="data-label">Socioeconomic:</span>
+        <span class="data-value">Small Business, Self-Certified SDB</span>
+
+        <span class="data-label">Location:</span>
+        <span class="data-value">Fort Worth, TX 76179</span>
+
+        <span class="data-label">Formed:</span>
+        <span class="data-value">January 2026</span>
+      </div>
+    </section>
+
+    <section class="experience">
+      <h2 class="section-label">Experience</h2>
+      <p class="experience-intro">NADCAP Heat Treat, Fluorescent Penetrant Inspection, and Film Radiography Inspection supplier for:</p>
+      <ul class="bullets">
+        <li><strong>F-35</strong></li>
+        <li><strong>F-16</strong></li>
+        <li><strong>Bell Helicopter</strong></li>
+        <li><strong>Sikorsky</strong></li>
+        <li><strong>Gulfstream</strong></li>
+        <li><strong>Honeywell</strong></li>
+        <li><strong>Collins Aerospace</strong></li>
+        <li><strong>Hartzell &mdash; U.S. Army aviation propeller program</strong></li>
+      </ul>
+    </section>
+  </div>
+
+</main>
+
+<footer class="footer-band">
+  <div class="footer-contact">
+    <strong>Justin Baker</strong>, CEO<br>
+    WolfMind Industries LLC<br>
+    <a href="mailto:justin@wolfmind.io">justin@wolfmind.io</a>
+  </div>
+  <div class="footer-right">
+    <div class="footer-url">wolfmind.io</div>
+    <div class="footer-tagline">Better. Cheaper. Everywhere.</div>
+  </div>
+</footer>
+
+</body>
+</html>
