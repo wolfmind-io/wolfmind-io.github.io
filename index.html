@@ -88,31 +88,38 @@
   }
 
   /* ── HERO ── */
+  .hero { margin-bottom: 8px; }
+
   .hero-number {
-    font-size: clamp(56px, 10vw, 96px);
+    font-size: clamp(44px, 6.2vw, 68px);
     font-weight: 700;
     color: var(--charcoal);
-    letter-spacing: -2px;
+    letter-spacing: -1.5px;
     line-height: 1;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
 
-  .hero-arrow { color: var(--amber); }
+  .hero-arrow {
+    color: var(--amber);
+    letter-spacing: 0;
+    margin: 0 0.1em;
+    font-weight: 600;
+  }
 
   .hero-context {
-    font-size: clamp(14px, 1.8vw, 17px);
+    font-size: clamp(14px, 1.6vw, 16px);
     color: var(--warm-gray);
     line-height: 1.55;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     max-width: 720px;
   }
 
   .positioning {
-    font-size: clamp(17px, 2.2vw, 22px);
+    font-size: clamp(18px, 1.9vw, 22px);
     font-weight: 600;
     color: var(--charcoal);
-    line-height: 1.4;
-    max-width: 780px;
+    line-height: 1.35;
+    max-width: 720px;
     margin-bottom: 28px;
   }
 
@@ -159,7 +166,7 @@
   .amber-rule {
     border: none;
     border-top: 2.5px solid var(--amber);
-    margin: 40px 0 32px;
+    margin: 32px 0 28px;
   }
 
   /* ── SECTION LABELS ── */
