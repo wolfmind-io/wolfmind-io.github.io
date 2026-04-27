@@ -14,6 +14,15 @@ Both upserts match People by `email_addresses` (unique) and Companies by
 `domains` when the submitter uses a non-generic email; otherwise a new
 Company record is created.
 
+After the Attio write succeeds, two side-effects fire fire-and-forget
+(the form response is already on the wire):
+
+1. **Confirmation email** to the submitter via Resend
+2. **Teams notification** to a Power Automate webhook
+
+Both are best-effort — failures are logged but never block the form
+response. Attio is the source of truth.
+
 ## Required Attio schema
 
 These were created in the Attio UI before the Worker was wired up:
@@ -22,6 +31,17 @@ These were created in the Attio UI before the Worker was wired up:
 - **People → Lead source** (single-select): Design partner cohort form · Keep me posted
 - **List "Inbound leads"** (parent: people) with a `Stage` status: New → Contacted → Qualified → Design partner → Declined
 
+## Secrets
+
+| Secret | Required | Purpose |
+| ------ | -------- | ------- |
+| `ATTIO_TOKEN` | yes | Attio API bearer token, scope `record:read-write` + `list_entry:read-write` |
+| `RESEND_API_KEY` | optional | Resend API key. Without it, confirmation emails are silently skipped. |
+| `TEAMS_WEBHOOK_URL` | optional | Power Automate "Workflows" webhook URL. Without it, Teams pings are silently skipped. |
+
+Set each with `npx wrangler secret put <NAME>` and paste the value when
+prompted.
+
 ## One-time deploy
 
 From this directory:
@@ -29,13 +49,11 @@ From this directory:
 ```sh
 npm install
 npx wrangler login                         # opens browser; signs into your CF account
-npx wrangler secret put ATTIO_TOKEN        # paste your Attio API token (read+write)
-npx wrangler deploy                        # publishes the Worker
+npx wrangler secret put ATTIO_TOKEN
+npx wrangler secret put RESEND_API_KEY     # optional
+npx wrangler secret put TEAMS_WEBHOOK_URL  # optional
+npx wrangler deploy
 ```
-
-The deploy step prints a URL like
-`https://wolfmind-forms.<your-subdomain>.workers.dev`. Put that URL in
-`../assets/app.js` (the `ENDPOINT` constant), commit, and push.
 
 ## Custom domain (optional)
 

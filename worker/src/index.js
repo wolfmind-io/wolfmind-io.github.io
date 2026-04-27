@@ -7,11 +7,19 @@
 // Both upsert a Person (matched by email) and add them to the "Inbound leads"
 // list with Stage = "New". The §05 form additionally upserts a Company and
 // links the Person to it.
+//
+// After a successful Attio write the Worker also (fire-and-forget):
+//   1. Sends a confirmation email to the submitter via Resend
+//   2. Posts a notification to a Microsoft Teams Power Automate webhook
+// Both are best-effort: failures are logged, never block the form response.
 
 const ATTIO = 'https://api.attio.com/v2';
+const ATTIO_APP = 'https://app.attio.com/wolf-mind-industries';
 const INBOUND_LEADS_LIST = 'inbound_leads';
 const PEOPLE = 'people';
 const COMPANIES = 'companies';
+const FROM_EMAIL = 'WolfMind Industries <hello@wolfmind.io>';
+const REPLY_TO = 'justin@wolfmind.io';
 
 const INTEREST_MAP = {
   aperture: 'Aperture',
@@ -41,7 +49,7 @@ const GENERIC_EMAIL_DOMAINS = new Set([
 ]);
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
     const allowed = ALLOWED_ORIGINS.has(origin) ? origin : 'https://wolfmind.io';
@@ -67,10 +75,10 @@ export default {
 
     try {
       if (url.pathname === '/design-partner') {
-        return json(await handleDesignPartner(env, body), 200, allowed);
+        return json(await handleDesignPartner(env, body, ctx), 200, allowed);
       }
       if (url.pathname === '/keep-posted') {
-        return json(await handleKeepPosted(env, body), 200, allowed);
+        return json(await handleKeepPosted(env, body, ctx), 200, allowed);
       }
       return json({ error: 'Not found' }, 404, allowed);
     } catch (err) {
@@ -84,7 +92,7 @@ export default {
 
 // ── Handlers ────────────────────────────────────────────────────────
 
-async function handleDesignPartner(env, body) {
+async function handleDesignPartner(env, body, ctx) {
   const company = trimStr(body.company, 200);
   const role = trimStr(body.role, 120);
   const name = trimStr(body.name, 120);
@@ -108,10 +116,17 @@ async function handleDesignPartner(env, body) {
   });
   const entryId = await addToInboundLeads(env, personRecordId);
 
+  fireSideEffects(env, ctx, {
+    source: 'Design partner cohort form',
+    email, name, company, role, interest, notes, page,
+    personRecordId,
+    emailKind: 'design-partner',
+  });
+
   return { ok: true, person: personRecordId, list_entry: entryId };
 }
 
-async function handleKeepPosted(env, body) {
+async function handleKeepPosted(env, body, ctx) {
   const email = trimStr(body.email, 200).toLowerCase();
   const page = trimStr(body.page, 500);
   const products = Array.isArray(body.products) ? body.products : [];
@@ -130,7 +145,186 @@ async function handleKeepPosted(env, body) {
   });
   const entryId = await addToInboundLeads(env, personRecordId);
 
+  fireSideEffects(env, ctx, {
+    source: 'Keep me posted',
+    email, interest, page,
+    personRecordId,
+    emailKind: 'keep-posted',
+  });
+
   return { ok: true, person: personRecordId, list_entry: entryId };
+}
+
+// ── Side-effects: confirmation email + Teams notification ───────────
+// Both are fire-and-forget. ctx.waitUntil keeps the Worker alive until
+// the promise settles, but the response is already on the wire.
+
+function fireSideEffects(env, ctx, payload) {
+  if (!ctx || typeof ctx.waitUntil !== 'function') return;
+  ctx.waitUntil(Promise.allSettled([
+    sendConfirmationEmail(env, payload).catch((e) => console.error('email failed', e)),
+    notifyTeams(env, payload).catch((e) => console.error('teams failed', e)),
+  ]));
+}
+
+async function sendConfirmationEmail(env, p) {
+  if (!env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY not set; skipping confirmation email');
+    return;
+  }
+  const tmpl = p.emailKind === 'design-partner'
+    ? designPartnerEmailTemplate(p)
+    : keepPostedEmailTemplate(p);
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [p.email],
+      reply_to: REPLY_TO,
+      subject: tmpl.subject,
+      text: tmpl.text,
+      html: tmpl.html,
+    }),
+  });
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(`resend ${res.status}: ${detail}`);
+  }
+}
+
+async function notifyTeams(env, p) {
+  if (!env.TEAMS_WEBHOOK_URL) {
+    console.warn('TEAMS_WEBHOOK_URL not set; skipping Teams notification');
+    return;
+  }
+  const attioUrl = p.personRecordId
+    ? `${ATTIO_APP}/objects/people/record/${p.personRecordId}`
+    : null;
+  const submitted_at = new Date().toISOString();
+  const payload = {
+    source: p.source,
+    email: p.email,
+    name: p.name || '',
+    company: p.company || '',
+    role: p.role || '',
+    interest: Array.isArray(p.interest) ? p.interest : [],
+    notes: p.notes || '',
+    page: p.page || '',
+    submitted_at,
+    attio_url: attioUrl,
+    // Pre-built strings for flows that just want one field to drop in:
+    summary: `${p.source}: ${p.name || p.email}${p.company ? ` (${p.company})` : ''}`,
+    text: buildTeamsText(p, submitted_at, attioUrl),
+  };
+  const res = await fetch(env.TEAMS_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '');
+    throw new Error(`teams ${res.status}: ${detail}`);
+  }
+}
+
+function buildTeamsText(p, submitted_at, attioUrl) {
+  const lines = [];
+  lines.push(`**${p.source}**`);
+  if (p.name)    lines.push(`**Name:** ${p.name}`);
+  if (p.email)   lines.push(`**Email:** ${p.email}`);
+  if (p.company) lines.push(`**Company:** ${p.company}`);
+  if (p.role)    lines.push(`**Role:** ${p.role}`);
+  if (p.interest && p.interest.length) lines.push(`**Interest:** ${p.interest.join(', ')}`);
+  if (p.notes)   lines.push(`**Notes:** ${p.notes}`);
+  if (p.page)    lines.push(`**Page:** ${p.page}`);
+  lines.push(`**Submitted:** ${submitted_at}`);
+  if (attioUrl)  lines.push(`[Open in Attio](${attioUrl})`);
+  return lines.join('\n\n');
+}
+
+function designPartnerEmailTemplate({ name, company }) {
+  const greeting = name ? `Hi ${name.split(/\s+/)[0]},` : 'Hi,';
+  const ref = company ? ` for ${company}` : '';
+  const text = `${greeting}
+
+Got your design-partner cohort application${ref}. We review every submission personally — expect a reply within a few business days.
+
+If you have a deadline or a specific production window we should know about, hit reply on this email and tell us.
+
+In the meantime, the public capability statement is here if it's useful:
+https://wolfmind.io/assets/WolfMind_Capability_Statement.pdf
+
+— Justin Baker
+WolfMind Industries
+hello@wolfmind.io
+`;
+  const html = `<!doctype html>
+<html><body style="margin:0;padding:0;background:#1A1A1A;font-family:'Hanken Grotesk',Arial,sans-serif;color:#C8C4BA;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#1A1A1A;">
+  <tr><td align="center" style="padding:32px 16px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;background:#232323;border:1px solid #4A4A4A;">
+      <tr><td style="padding:24px 32px;border-bottom:2px solid #D97706;">
+        <span style="font-weight:700;color:#F0ECE3;letter-spacing:0.32em;font-size:14px;">WOLFMIND</span>
+        <span style="color:#5C5C5C;letter-spacing:0.22em;font-size:14px;"> INDUSTRIES</span>
+      </td></tr>
+      <tr><td style="padding:32px;color:#C8C4BA;font-size:15px;line-height:1.65;">
+        <p style="margin:0 0 16px;color:#F0ECE3;">${escapeHtml(greeting)}</p>
+        <p style="margin:0 0 16px;">Got your design-partner cohort application${escapeHtml(ref)}. We review every submission personally — expect a reply within a few business days.</p>
+        <p style="margin:0 0 16px;">If you have a deadline or a specific production window we should know about, hit reply and tell us.</p>
+        <p style="margin:0 0 24px;">In the meantime, the public capability statement is <a href="https://wolfmind.io/assets/WolfMind_Capability_Statement.pdf" style="color:#D97706;">here</a> if it's useful.</p>
+        <p style="margin:0;color:#7C7C7C;font-size:13px;font-style:italic;">— Justin Baker</p>
+        <p style="margin:0;color:#7C7C7C;font-size:13px;">WolfMind Industries · <a href="mailto:hello@wolfmind.io" style="color:#7C7C7C;">hello@wolfmind.io</a></p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
+  return { subject: 'WolfMind — application received', text, html };
+}
+
+function keepPostedEmailTemplate({ email }) {
+  const text = `Thanks — you're on the list.
+
+We send a short note when there's real news: first units, public benchmarks, open specifications. Nothing else.
+
+— Justin Baker
+WolfMind Industries
+hello@wolfmind.io
+
+To unsubscribe, reply with "unsubscribe" and we'll remove ${email}.
+`;
+  const html = `<!doctype html>
+<html><body style="margin:0;padding:0;background:#1A1A1A;font-family:'Hanken Grotesk',Arial,sans-serif;color:#C8C4BA;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#1A1A1A;">
+  <tr><td align="center" style="padding:32px 16px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;background:#232323;border:1px solid #4A4A4A;">
+      <tr><td style="padding:24px 32px;border-bottom:2px solid #D97706;">
+        <span style="font-weight:700;color:#F0ECE3;letter-spacing:0.32em;font-size:14px;">WOLFMIND</span>
+        <span style="color:#5C5C5C;letter-spacing:0.22em;font-size:14px;"> INDUSTRIES</span>
+      </td></tr>
+      <tr><td style="padding:32px;color:#C8C4BA;font-size:15px;line-height:1.65;">
+        <p style="margin:0 0 16px;color:#F0ECE3;">Thanks — you're on the list.</p>
+        <p style="margin:0 0 24px;">We send a short note when there's real news: first units, public benchmarks, open specifications. Nothing else.</p>
+        <p style="margin:0;color:#7C7C7C;font-size:13px;font-style:italic;">— Justin Baker</p>
+        <p style="margin:0 0 16px;color:#7C7C7C;font-size:13px;">WolfMind Industries · <a href="mailto:hello@wolfmind.io" style="color:#7C7C7C;">hello@wolfmind.io</a></p>
+        <p style="margin:0;color:#5C5C5C;font-size:11px;">To unsubscribe, reply with &ldquo;unsubscribe&rdquo; and we&rsquo;ll remove ${escapeHtml(email)}.</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
+  return { subject: 'WolfMind — you\'re on the list', text, html };
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
 }
 
 // ── Attio operations ────────────────────────────────────────────────
