@@ -206,7 +206,20 @@ async function notifyTeams(env, p) {
     ? `${ATTIO_APP}/objects/people/record/${p.personRecordId}`
     : null;
   const submitted_at = new Date().toISOString();
+  const card = buildAdaptiveCard(p, submitted_at, attioUrl);
+  // Canonical Microsoft Teams webhook message shape — `attachments` is what
+  // the "Send webhook alerts to a channel" flow template iterates over to
+  // post each Adaptive Card. Extra flat fields are kept alongside for any
+  // downstream filtering or routing in the flow.
   const payload = {
+    type: 'message',
+    attachments: [
+      {
+        contentType: 'application/vnd.microsoft.card.adaptive',
+        contentUrl: null,
+        content: card,
+      },
+    ],
     source: p.source,
     email: p.email,
     name: p.name || '',
@@ -216,8 +229,7 @@ async function notifyTeams(env, p) {
     notes: p.notes || '',
     page: p.page || '',
     submitted_at,
-    attio_url: attioUrl,
-    // Pre-built strings for flows that just want one field to drop in:
+    attio_url: attioUrl || '',
     summary: `${p.source}: ${p.name || p.email}${p.company ? ` (${p.company})` : ''}`,
     text: buildTeamsText(p, submitted_at, attioUrl),
   };
@@ -245,6 +257,95 @@ function buildTeamsText(p, submitted_at, attioUrl) {
   lines.push(`**Submitted:** ${submitted_at}`);
   if (attioUrl)  lines.push(`[Open in Attio](${attioUrl})`);
   return lines.join('\n\n');
+}
+
+// Adaptive Card 1.4 — Teams Flowbot-compatible. Drop into the
+// "Post card in a chat or channel" action's Adaptive Card field.
+function buildAdaptiveCard(p, submitted_at, attioUrl) {
+  const facts = [];
+  if (p.name)    facts.push({ title: 'Name', value: p.name });
+  if (p.email)   facts.push({ title: 'Email', value: p.email });
+  if (p.company) facts.push({ title: 'Company', value: p.company });
+  if (p.role)    facts.push({ title: 'Role', value: p.role });
+  if (p.interest && p.interest.length) facts.push({ title: 'Interest', value: p.interest.join(', ') });
+  facts.push({ title: 'Submitted', value: submitted_at });
+
+  const body = [
+    {
+      type: 'TextBlock',
+      text: 'WolfMind · New lead',
+      weight: 'Bolder',
+      size: 'Small',
+      color: 'Accent',
+      isSubtle: false,
+      spacing: 'None',
+    },
+    {
+      type: 'TextBlock',
+      text: p.source,
+      weight: 'Bolder',
+      size: 'Medium',
+      wrap: true,
+      spacing: 'Small',
+    },
+    {
+      type: 'FactSet',
+      facts,
+      spacing: 'Medium',
+    },
+  ];
+
+  if (p.notes) {
+    body.push({
+      type: 'TextBlock',
+      text: 'Notes',
+      weight: 'Bolder',
+      size: 'Small',
+      color: 'Accent',
+      spacing: 'Medium',
+    });
+    body.push({
+      type: 'TextBlock',
+      text: p.notes,
+      wrap: true,
+      spacing: 'None',
+    });
+  }
+
+  if (p.page) {
+    body.push({
+      type: 'TextBlock',
+      text: `Page: ${p.page}`,
+      isSubtle: true,
+      size: 'Small',
+      wrap: true,
+      spacing: 'Medium',
+    });
+  }
+
+  const actions = [];
+  if (attioUrl) {
+    actions.push({
+      type: 'Action.OpenUrl',
+      title: 'Open in Attio',
+      url: attioUrl,
+    });
+  }
+  if (p.email) {
+    actions.push({
+      type: 'Action.OpenUrl',
+      title: 'Reply',
+      url: `mailto:${p.email}`,
+    });
+  }
+
+  return {
+    type: 'AdaptiveCard',
+    $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+    version: '1.4',
+    body,
+    actions,
+  };
 }
 
 function designPartnerEmailTemplate({ name, company }) {
