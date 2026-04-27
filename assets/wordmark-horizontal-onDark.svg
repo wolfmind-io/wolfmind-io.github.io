@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 78" role="img" aria-label="WolfMind Industries">
+  <text x="0" y="36" font-family="&#39;Hanken Grotesk&#39;,&#39;Inter&#39;,ui-sans-serif,system-ui,sans-serif" font-weight="700" font-size="34" letter-spacing="10.88" fill="#F0ECE3">WOLFMIND</text>
+  <text x="0" y="60" font-family="&#39;Hanken Grotesk&#39;,&#39;Inter&#39;,ui-sans-serif,system-ui,sans-serif" font-weight="400" font-size="13" letter-spacing="2.86" fill="#A8A8A8">INDUSTRIES</text>
+  <line x1="0" y1="73" x2="320" y2="73" stroke="#D97706" stroke-width="1.8"></line>
+</svg>

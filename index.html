@@ -1,408 +1,1312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WolfMind Industries — Rebuilding Domestic Heat Treatment and NDT Capacity</title>
-<meta name="description" content="WolfMind Industries is rebuilding U.S. heat treatment and nondestructive testing capacity with deployable furnaces and radiographic inspection systems. Fort Worth, TX.">
+<title>WolfMind Industries — Aerospace-grade quality. Anywhere. Deployed from a crate.</title>
+<meta name="description" content="WolfMind builds the inspection equipment, data systems, and records layer that bring aerospace-grade quality to any shop floor. Aperture radiographic imaging, PyroMesh pyrometry, Digital Provenance records. Fort Worth, TX.">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wolfmind.io/">
 <meta property="og:title" content="WolfMind Industries">
-<meta property="og:description" content="Rebuilding domestic heat treatment and NDT capacity. Deployable furnaces and radiographic inspection. Fort Worth, TX.">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="Aerospace-grade quality. Anywhere. Deployed from a crate. Aperture, PyroMesh, Digital Provenance — independent products that share a record format.">
+<meta property="og:image" content="https://wolfmind.io/img/aperture-cad-iso.jpg">
+<meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232D2D2D'/%3E%3Ctext x='50' y='62' font-family='Calibri,sans-serif' font-size='56' font-weight='700' text-anchor='middle' fill='%23FFFFFF'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 
 <style>
   :root {
-    --charcoal: #2D2D2D;
-    --warm-gray: #5C5C5C;
-    --amber: #D97706;
+    --charcoal-900: #1A1A1A;
+    --charcoal-800: #232323;
+    --charcoal-700: #2D2D2D;
+    --charcoal-600: #3A3A3A;
+    --charcoal-500: #4A4A4A;
+    --gray-400: #7C7C7C;
+    --gray-300: #A8A8A8;
+    --gray-200: #C8C4BA;
+    --gray-100: #F0ECE3;
     --cream: #F5F0E6;
-    --slate: #4A5568;
-    --light-gray: #D1D5DB;
-    --white: #FFFFFF;
+    --cream-50: #FAF7F0;
+    --amber: #D97706;
+    --amber-700: #B45309;
+    --border-light: #D1D5DB;
+
+    --font-sans: 'Hanken Grotesk', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+
+    --gutter: clamp(20px, 4.5vw, 56px);
+    --section-y: clamp(48px, 7vw, 88px);
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: Calibri, 'Segoe UI', system-ui, -apple-system, sans-serif;
-    color: var(--warm-gray);
-    background: var(--white);
-    line-height: 1.5;
-    min-height: 100vh;
+    margin: 0;
+    background: var(--charcoal-900);
+    color: var(--gray-200);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+
+  a { color: inherit; }
+
+  button { font: inherit; }
+
+  ::selection { background: var(--amber); color: var(--charcoal-900); }
+
+  /* ── TOPBAR ───────────────────────────────────────────────── */
+  .topbar {
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px var(--gutter);
+    border-bottom: 1px solid var(--charcoal-500);
+    background: var(--charcoal-900);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .topbar__brand { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .topbar__brand img { height: 28px; width: auto; }
+  .topbar__nav { display: flex; gap: 28px; }
+  .topbar__nav a { text-decoration: none; color: var(--gray-300); transition: color 120ms; }
+  .topbar__nav a:hover { color: var(--gray-100); }
+  .topbar__meta { display: flex; gap: 24px; align-items: center; color: var(--gray-400); }
+  .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 0 4px rgba(217,119,6,0.18);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(217,119,6,0.18); }
+    50%      { box-shadow: 0 0 0 6px rgba(217,119,6,0.06); }
+  }
+  .topbar__status { display: flex; align-items: center; gap: 8px; color: var(--amber); }
+
+  @media (max-width: 880px) {
+    .topbar__nav { display: none; }
+  }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .hero {
+    padding: clamp(36px, 6vw, 64px) var(--gutter) clamp(36px, 5vw, 48px);
+    border-bottom: 1px solid var(--charcoal-500);
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: clamp(24px, 5vw, 64px);
+    align-items: start;
+  }
+  .hero__display {
+    font-size: clamp(40px, 6.4vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 300;
+    color: var(--gray-100);
+    margin: 0;
+    padding-top: clamp(0px, 1.5vw, 24px);
+  }
+  .hero__amber-line { font-style: italic; color: var(--amber); font-weight: 400; }
+  .hero__lede {
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.6;
+    color: var(--gray-200);
+    max-width: 560px;
+    margin-top: clamp(24px, 3vw, 40px);
+    font-weight: 400;
+  }
+  .hero__tagline {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--amber);
+    letter-spacing: 0.04em;
+    margin-top: clamp(20px, 2.5vw, 32px);
+    padding-left: 16px;
+    border-left: 2px solid var(--amber);
+  }
+  .hero__image {
+    aspect-ratio: 1 / 1;
+    background: #0a0a0a;
+    border: 1px solid var(--charcoal-500);
+    overflow: hidden;
+    position: relative;
+  }
+  .hero__image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 65%;
+    transform: scale(1.18);
+    transform-origin: center 65%;
+    filter: contrast(1.05);
+  }
+  .hero__image-overlay {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-200);
+    letter-spacing: 0.04em;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  .hero__image-overlay .accent { color: var(--amber); }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero__image { max-width: 520px; }
+  }
+
+  /* ── SECTIONS ─────────────────────────────────────────────── */
+  .section {
+    padding: var(--section-y) var(--gutter);
+    border-bottom: 1px solid var(--charcoal-500);
+  }
+  .section__header {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .section__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    padding-top: 14px;
+    border-top: 2px solid var(--amber);
+  }
+  .section__title {
+    font-size: clamp(28px, 4.2vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    color: var(--gray-100);
+    margin: 0;
+    max-width: 900px;
+  }
+  .section__lede {
+    font-size: clamp(15px, 1.4vw, 17px);
+    line-height: 1.6;
+    color: var(--gray-200);
+    max-width: 720px;
+    margin-top: 20px;
+  }
+  .section__footnote {
+    margin-top: 32px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 720px) {
+    .section__header { grid-template-columns: 1fr; gap: 12px; }
+    .section__num { display: inline-block; padding-top: 10px; }
+  }
+
+  /* ── PRODUCTS ─────────────────────────────────────────────── */
+  .products__head, .product {
+    display: grid;
+    grid-template-columns: 110px 1.4fr 2fr 1.2fr 200px;
+    gap: 24px;
+    align-items: center;
+  }
+  .products__head {
+    padding: 0 24px 12px;
+    border-bottom: 1px solid var(--charcoal-500);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+  .products__head .ta-right { text-align: right; }
+  .product {
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--charcoal-500);
+  }
+  .product__thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #000;
+    overflow: hidden;
+    border: 1px solid var(--charcoal-500);
+  }
+  .product__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .product__thumb img.warm { filter: saturate(0.35) contrast(1.05) brightness(0.85) sepia(0.18); }
+  .product__model {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 8px;
+    letter-spacing: 0.08em;
+  }
+  .product__name {
+    font-size: clamp(20px, 2vw, 24px);
+    font-weight: 500;
+    color: var(--gray-100);
+    margin: 0 0 6px;
+    letter-spacing: -0.005em;
+  }
+  .product__kind {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .product__desc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--gray-200);
+    margin: 0;
+  }
+  .product__note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+    margin: 10px 0 0;
+  }
+  .product__specs {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gray-300);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .product__spec-line {
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  .product__spec-line .k { color: var(--gray-400); }
+  .product__spec-line .v {
+    color: var(--gray-100);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .product__ctas {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background 120ms, color 120ms, border-color 120ms;
+  }
+  .btn--primary { background: var(--amber); color: var(--charcoal-900); }
+  .btn--primary:hover { background: var(--amber-700); color: var(--gray-100); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--gray-200);
+    border-color: var(--charcoal-500);
+    font-weight: 500;
+    justify-content: center;
+  }
+  .btn--ghost:hover { border-color: var(--gray-300); color: var(--gray-100); }
+
+  @media (max-width: 980px) {
+    .products__head { display: none; }
+    .product {
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 28px 0;
+    }
+    .product__media-col { grid-column: 1 / 2; }
+    .product__name-col { grid-column: 2 / 3; }
+    .product__desc-col { grid-column: 1 / -1; }
+    .product__specs { grid-column: 1 / -1; }
+    .product__ctas { grid-column: 1 / -1; flex-direction: row; }
+    .product__ctas .btn { flex: 1; }
+  }
+  @media (max-width: 520px) {
+    .product { grid-template-columns: 1fr; gap: 14px; }
+    .product__media-col, .product__name-col, .product__desc-col { grid-column: 1 / -1; }
+    .product__thumb { max-width: 200px; }
+    .product__ctas { flex-direction: column; }
+  }
+
+  /* ── APPROACH ─────────────────────────────────────────────── */
+  .thesis-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .thesis-quote {
+    font-size: clamp(22px, 2.8vw, 32px);
+    line-height: 1.25;
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    color: var(--gray-100);
+    padding-left: 28px;
+    border-left: 2.5px solid var(--amber);
+    margin: 0;
+  }
+  .thesis-body {
+    margin-top: 36px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--gray-200);
+  }
+  .thesis-body p { margin: 0 0 16px; }
+  .thesis-body p:last-child { margin-bottom: 0; }
+  .thesis-body .accent-num {
+    color: var(--amber);
+    font-variant-numeric: tabular-nums;
+  }
+  .thesis-body .closer {
+    color: var(--gray-100);
+    font-weight: 500;
+    font-size: 18px;
+  }
+
+  .operating-panel {
+    background: var(--cream);
+    color: #1F1B14;
+    padding: 32px 36px 36px;
+    border: 1px solid rgba(217, 119, 87, 0.35);
+  }
+  .operating-panel__header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid rgba(31, 27, 20, 0.14);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .operating-panel__tag { font-weight: 600; }
+  .operating-panel__meta { color: rgba(31, 27, 20, 0.5); font-weight: 400; }
+  .operating-panel__body { font-size: 15px; line-height: 1.65; color: #1F1B14; }
+  .operating-panel__body p { margin: 0 0 16px; }
+  .operating-panel__pivot {
+    font-size: 21px;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #1F1B14;
+    margin: 24px 0 !important;
+    padding-left: 18px;
+    border-left: 3px solid var(--amber);
+  }
+
+  @media (max-width: 980px) {
+    .thesis-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── PROTOTYPE STATS ─────────────────────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--charcoal-500);
+    border: 1px solid var(--charcoal-500);
+    margin-bottom: 48px;
+  }
+  .stat {
+    background: var(--charcoal-800);
+    padding: clamp(20px, 2.4vw, 32px) clamp(16px, 2vw, 24px);
+    min-height: 180px;
     display: flex;
     flex-direction: column;
   }
-
-  /* ── HEADER BAND ── */
-  .header-band {
-    background: var(--charcoal);
-    padding: 18px clamp(20px, 5vw, 64px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .header-left {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-  }
-
-  .wordmark {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 5px;
+  .stat__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-  }
-
-  .wordmark-sub {
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--warm-gray);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-
-  .header-tagline {
-    font-size: 13px;
     color: var(--amber);
-    font-style: italic;
-  }
-
-  /* ── MAIN ── */
-  main {
-    flex: 1;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: clamp(32px, 5vw, 64px) clamp(20px, 5vw, 48px);
-  }
-
-  /* ── HERO ── */
-  .hero { margin-bottom: 8px; }
-
-  .hero-number {
-    font-size: clamp(44px, 6.2vw, 68px);
-    font-weight: 700;
-    color: var(--charcoal);
-    letter-spacing: -1.5px;
-    line-height: 1;
-    margin-bottom: 18px;
-  }
-
-  .hero-arrow {
-    color: var(--amber);
-    letter-spacing: 0;
-    margin: 0 0.1em;
-    font-weight: 600;
-  }
-
-  .hero-context {
-    font-size: clamp(14px, 1.6vw, 16px);
-    color: var(--warm-gray);
-    line-height: 1.55;
-    margin-bottom: 20px;
-  }
-
-  .positioning {
-    font-size: clamp(18px, 1.9vw, 22px);
-    font-weight: 600;
-    color: var(--charcoal);
-    line-height: 1.35;
-    margin-bottom: 28px;
-  }
-
-  .cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
     margin-bottom: 12px;
   }
-
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    border-radius: 2px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  .stat__num {
+    font-size: clamp(36px, 4.4vw, 52px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: var(--gray-100);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
-
-  .cta-primary {
-    background: var(--amber);
-    color: var(--white);
+  .stat__caption {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--gray-200);
+    margin-top: 14px;
   }
+  @media (max-width: 980px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .stats-grid { grid-template-columns: 1fr; } }
 
-  .cta-primary:hover { background: #B45309; }
-
-  .cta-secondary {
-    background: transparent;
-    color: var(--charcoal);
-    border: 2px solid var(--charcoal);
-  }
-
-  .cta-secondary:hover {
-    background: var(--charcoal);
-    color: var(--white);
-  }
-
-  /* ── AMBER RULE ── */
-  .amber-rule {
-    border: none;
-    border-top: 2.5px solid var(--amber);
-    margin: 32px 0 28px;
-  }
-
-  /* ── SECTION LABELS ── */
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--amber);
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--light-gray);
-  }
-
-  /* ── TWO-COLUMN SECTIONS (stack on mobile) ── */
-  .two-col {
+  /* ── CONTACT SHEET ───────────────────────────────────────── */
+  .contact-sheet {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 36px 48px;
-    margin-bottom: 36px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
   }
-
-  @media (max-width: 720px) {
-    .two-col { grid-template-columns: 1fr; gap: 28px; }
-  }
-
-  /* ── BULLET LISTS ── */
-  .bullets {
-    list-style: none;
-    padding: 0;
-  }
-
-  .bullets li {
-    font-size: 14px;
-    color: var(--warm-gray);
-    line-height: 1.55;
-    margin-bottom: 10px;
-    padding-left: 14px;
+  .contact-cell {
+    aspect-ratio: 1 / 1;
+    background: #000;
+    border: 1px solid var(--charcoal-500);
+    overflow: hidden;
     position: relative;
   }
+  .contact-cell img { width: 100%; height: 100%; object-fit: cover; }
+  .contact-cell__label {
+    position: absolute; left: 8px; bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--gray-200);
+    background: rgba(0,0,0,0.7);
+    padding: 3px 6px;
+  }
+  .contact-sheet + .section__footnote {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    margin-top: 16px;
+  }
+  @media (max-width: 720px) { .contact-sheet { grid-template-columns: repeat(2, 1fr); } }
 
-  .bullets li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 9px;
-    width: 5px;
-    height: 5px;
+  /* ── LINEAGE ─────────────────────────────────────────────── */
+  .lineage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 48px);
+  }
+  .lineage-card {
+    border-top: 1px solid var(--charcoal-500);
+    padding-top: 24px;
+  }
+  .lineage-card__role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .lineage-card__name {
+    font-size: clamp(22px, 2.4vw, 26px);
+    font-weight: 500;
+    color: var(--gray-100);
+  }
+  .lineage-card__bio {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--gray-200);
+    margin-top: 16px;
+  }
+  .lineage-callout {
+    margin-top: 36px;
+    padding: 24px 28px;
+    background: var(--charcoal-800);
+    border-left: 3px solid var(--amber);
+    color: var(--gray-200);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .lineage-callout__head {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 500;
+    color: var(--gray-100);
+    margin-bottom: 12px;
+  }
+  .lineage-callout p { margin: 0; }
+  .lineage-callout__meta {
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray-400);
+  }
+  @media (max-width: 720px) { .lineage-grid { grid-template-columns: 1fr; } }
+
+  /* ── ENGAGEMENT (CTA) ────────────────────────────────────── */
+  .engagement {
+    background: var(--cream);
+    color: #1F1B14;
+    padding: var(--section-y) var(--gutter);
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  .engagement__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 16px;
+  }
+  .engagement__title {
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: #1F1B14;
+    margin: 0;
+  }
+  .engagement__body {
+    font-size: clamp(15px, 1.4vw, 17px);
+    line-height: 1.6;
+    color: #5C5C5C;
+    margin-top: 20px;
+    max-width: 480px;
+  }
+  .engagement__body--accent { font-style: italic; color: var(--amber); }
+  .engagement__body--accent a { color: var(--amber); }
+
+  .form {
+    display: flex; flex-direction: column; gap: 12px;
+    background: #fff;
+    padding: clamp(20px, 3vw, 32px);
+    border: 1px solid var(--border-light);
+  }
+  .form__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .form__label-extra {
+    color: var(--gray-400);
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-sans);
+  }
+  .form__input, .form__textarea {
+    background: var(--cream-50);
+    border: 1px solid var(--border-light);
+    color: #1F1B14;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    width: 100%;
+  }
+  .form__input:focus, .form__textarea:focus {
+    outline: 2px solid var(--amber);
+    outline-offset: -1px;
+  }
+  .form__textarea { resize: vertical; min-height: 80px; }
+
+  .chips { display: flex; flex-direction: column; gap: 8px; }
+  .chip {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--cream-50);
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    color: #1F1B14;
+    transition: background 120ms, border-color 120ms;
+  }
+  .chip[aria-pressed="true"] {
+    background: rgba(217, 119, 6, 0.10);
+    border-color: var(--amber);
+  }
+  .chip__box {
+    width: 16px; height: 16px;
+    border: 1.5px solid #7C7C7C;
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; font-weight: 700;
+  }
+  .chip[aria-pressed="true"] .chip__box {
+    border-color: var(--amber);
     background: var(--amber);
   }
+  .chip__label { font-size: 14px; font-weight: 500; }
+  .chip__kind {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .chip__box::after { content: ''; }
+  .chip[aria-pressed="true"] .chip__box::after { content: '✓'; }
 
-  .bullets li strong {
-    color: var(--charcoal);
-    font-weight: 700;
+  .form__submit {
+    background: var(--amber);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 14px 18px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    display: flex; justify-content: space-between;
+    transition: background 120ms;
+  }
+  .form__submit:hover { background: var(--amber-700); }
+  .form__submit:disabled { opacity: 0.6; cursor: progress; }
+
+  .form__status {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--gray-400);
+    min-height: 1em;
+  }
+  .form__status--ok { color: #0A7A6F; }
+  .form__status--err { color: #B45309; }
+
+  @media (max-width: 880px) {
+    .engagement { grid-template-columns: 1fr; }
   }
 
-  .stat-highlight {
-    color: var(--amber);
-    font-weight: 700;
+  /* ── KEEP ME POSTED MODAL ────────────────────────────────── */
+  .updates-dialog {
+    background: var(--charcoal-800);
+    color: var(--gray-200);
+    border: 1px solid var(--charcoal-500);
+    padding: 0;
+    width: min(560px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    overflow: auto;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    font-family: var(--font-sans);
   }
-
-  /* ── CORPORATE DATA GRID ── */
-  .data-grid {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 6px 18px;
-    font-size: 13.5px;
+  .updates-dialog::backdrop {
+    background: rgba(10, 10, 10, 0.78);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
-
-  .data-label {
-    font-weight: 700;
-    color: var(--charcoal);
-    white-space: nowrap;
+  .updates-dialog__inner {
+    padding: clamp(24px, 4vw, 36px);
   }
-
-  .data-value { color: var(--warm-gray); }
-
-  /* ── EXPERIENCE ── */
-  .experience-intro {
-    font-size: 14px;
-    color: var(--warm-gray);
-    line-height: 1.55;
-    margin-bottom: 10px;
-  }
-
-  .experience .bullets li::before { background: var(--slate); }
-
-  /* ── FOOTER BAND ── */
-  .footer-band {
-    background: var(--charcoal);
-    padding: 22px clamp(20px, 5vw, 64px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+  .updates-dialog__head {
+    display: flex; justify-content: space-between; align-items: flex-start;
     gap: 16px;
-    margin-top: 48px;
+    margin-bottom: 20px;
   }
-
-  .footer-contact {
-    font-size: 13px;
-    color: var(--light-gray);
-    line-height: 1.55;
-  }
-
-  .footer-contact strong {
-    color: var(--white);
-    font-weight: 700;
-  }
-
-  .footer-contact a {
-    color: var(--light-gray);
-    text-decoration: none;
-  }
-
-  .footer-contact a:hover { color: var(--amber); }
-
-  .footer-right { text-align: right; }
-
-  .footer-url {
-    font-size: 13px;
-    color: var(--light-gray);
-    letter-spacing: 1px;
-  }
-
-  .footer-tagline {
-    font-size: 13px;
+  .updates-dialog__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .updates-dialog__title {
+    font-size: clamp(22px, 2.4vw, 28px);
+    line-height: 1.2;
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    color: var(--gray-100);
+    margin: 0 0 8px;
+  }
+  .updates-dialog__close {
+    background: transparent;
+    border: 1px solid var(--charcoal-500);
+    color: var(--gray-300);
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 120ms, color 120ms;
+  }
+  .updates-dialog__close:hover { border-color: var(--gray-300); color: var(--gray-100); }
+  .updates-dialog__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--gray-300);
+    margin: 0 0 24px;
+  }
+  .updates-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+  .updates-form .form__input {
+    background: var(--charcoal-900);
+    border: 1px solid var(--charcoal-500);
+    color: var(--gray-100);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    width: 100%;
+  }
+  .updates-form .form__input::placeholder { color: var(--gray-400); }
+  .updates-form .form__input:focus {
+    outline: 2px solid var(--amber);
+    outline-offset: -1px;
+  }
+  .updates-form .form__submit {
+    margin: 0;
+    padding: 12px 16px;
+  }
+  .updates-form__select {
+    grid-column: 1 / -1;
+    margin: 8px 0 0;
+    border: 1px solid var(--charcoal-500);
+    padding: 12px 14px;
+  }
+  .updates-form__select legend {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    padding: 0 6px;
+  }
+  .updates-form__select-grid {
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .updates-form__select label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-300);
+    cursor: pointer;
+  }
+  .updates-form__select input[type="checkbox"] { accent-color: var(--amber); }
+
+  @media (max-width: 540px) {
+    .updates-form { grid-template-columns: 1fr; }
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .footer {
+    padding: 40px var(--gutter) 56px;
+    background: var(--charcoal-900);
+    color: var(--gray-400);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    font-size: 13px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  .footer__brand img { height: 64px; margin-bottom: 28px; display: block; }
+  .footer__brand .tag {
     font-style: italic;
-    margin-top: 4px;
+    color: var(--amber);
+    font-size: 13px;
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+  }
+  .footer__brand .legal {
+    margin-top: 16px;
+    font-size: 11px;
+    color: #5C5C5C;
+  }
+  .footer__col-head {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--gray-300);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .footer__col-list {
+    display: flex; flex-direction: column; gap: 6px;
+    color: var(--gray-300);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .footer__col-list a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 120ms;
+  }
+  .footer__col-list a:hover { color: var(--amber); }
+
+  @media (max-width: 880px) { .footer { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .footer { grid-template-columns: 1fr; } }
+
+  /* ── ACCESSIBILITY ──────────────────────────────────────── */
+  :focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
 <body>
 
-<header class="header-band">
-  <div class="header-left">
-    <span class="wordmark">WolfMind</span>
-    <span class="wordmark-sub">Industries</span>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar__brand">
+    <img src="assets/wordmark-topbar-onDark.svg" alt="WolfMind Industries">
+    <nav class="topbar__nav" aria-label="Primary">
+      <a href="#products">Products</a>
+      <a href="#approach">Approach</a>
+      <a href="#prototype">Prototype</a>
+      <a href="#lineage">Lineage</a>
+      <a href="#interest">Contact</a>
+    </nav>
   </div>
-  <div class="header-tagline">Better. Cheaper. Everywhere.</div>
+  <div class="topbar__meta">
+    <span>Fort Worth, TX</span>
+    <span class="topbar__status">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <span>Design-partner cohort open</span>
+    </span>
+  </div>
 </header>
 
-<main>
-
-  <section class="hero">
-    <div class="hero-number">6,150 <span class="hero-arrow">&rarr;</span> 1,750</div>
-    <p class="hero-context">
-      U.S. metalcasting plants since 2000. The heat treaters and inspection facilities that serve them are closing in turn. Twelve in the past year alone.
+<!-- HERO -->
+<section class="hero" aria-label="Introduction">
+  <div>
+    <h1 class="hero__display">
+      Aerospace-grade quality.<br>
+      Anywhere.<br>
+      <span class="hero__amber-line">Deployed from a crate.</span>
+    </h1>
+    <p class="hero__lede">
+      WolfMind exists because a shop in rural Texas should have the same capabilities as a Tier&nbsp;1 supplier. We build the inspection equipment, the data systems, and the records layer that make it possible, at a fraction of what they cost today. We&rsquo;re not another option. We&rsquo;re the path forward.
     </p>
-    <p class="positioning">
-      WolfMind is rebuilding domestic heat treatment and nondestructive testing capacity with deployable industrial furnaces and radiographic inspection systems.
-    </p>
-    <div class="cta-row">
-      <a class="cta cta-primary" href="/assets/WolfMind_Capability_Statement.pdf">Capability Statement (PDF)</a>
-      <a class="cta cta-secondary" href="mailto:justin@wolfmind.io">Contact</a>
+    <div class="hero__tagline">BETTER. CHEAPER. EVERYWHERE.</div>
+  </div>
+  <div class="hero__image" aria-hidden="false">
+    <img src="img/aperture-cad-iso.jpg" alt="Aperture imaging chain — CAD render of camera, scintillator, optics, and 45° mirror assembly" width="2050" height="1444">
+    <div class="hero__image-overlay">
+      <span>FIG · APERTURE-IS-1 · IMAGING CHAIN</span>
+      <span class="accent">APR 2026</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <hr class="amber-rule">
-
-  <div class="two-col">
-    <section>
-      <h2 class="section-label">Core Competencies</h2>
-      <ul class="bullets">
-        <li><strong>Heat treating of metals</strong> &mdash; aluminum, magnesium, and nickel superalloy thermal processing per AMS 2770/2771</li>
-        <li><strong>Nondestructive testing</strong> &mdash; radiographic inspection, fluorescent penetrant inspection, materials testing (hardness, conductivity, tensile)</li>
-        <li><strong>Radiographic imaging systems</strong> &mdash; commodity X-ray inspection apparatus using scintillator-camera architecture</li>
-        <li><strong>Industrial process furnace manufacturing</strong> &mdash; modular bolt-on panel furnaces designed for field deployment</li>
-        <li><strong>Temperature instrumentation</strong> &mdash; PyroMesh AMS 2750 compliance automation platform</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 class="section-label">Differentiators</h2>
-      <ul class="bullets">
-        <li><strong>3rd generation aerospace</strong> &mdash; founded from inside the industry it serves</li>
-        <li><strong><span class="stat-highlight">$1,900</span> imaging chain</strong> &mdash; validated April 2026. Conventional systems start at $150,000. Repeatable cost structure.</li>
-        <li><strong>Born digital</strong> &mdash; tamper-evident hash-chain data provenance from day one, no legacy retrofit</li>
-        <li><strong>Modular deployment</strong> &mdash; furnace panels bolt together on a concrete floor, designed for field assembly</li>
-        <li><strong>Open architecture</strong> &mdash; no proprietary lock-in, standards-compliant outputs</li>
-      </ul>
-    </section>
+<!-- §01 PRODUCTS -->
+<section class="section" id="products" aria-labelledby="products-title">
+  <div class="section__header">
+    <div class="section__num">§ 01 · Products</div>
+    <div>
+      <h2 class="section__title" id="products-title">
+        Four independent products. Run together or standalone.
+      </h2>
+      <p class="section__lede">
+        Each one ships from a crate. Built for auditability. Cryptographic provenance, verifiable chain of custody. Together, they form a continuous record from furnace through inspection.
+      </p>
+    </div>
   </div>
 
-  <div class="two-col">
-    <section>
-      <h2 class="section-label">Corporate Data</h2>
-      <div class="data-grid">
-        <span class="data-label">NAICS:</span>
-        <span class="data-value">332811 (primary), 541380, 333994, 334513, 334519, 541690</span>
+  <div class="products">
+    <div class="products__head" role="row">
+      <span>Model</span>
+      <span>Name</span>
+      <span>Description</span>
+      <span>Spec</span>
+      <span class="ta-right">Action</span>
+    </div>
 
-        <span class="data-label">CAGE / NCAGE:</span>
-        <span class="data-value">1QT90</span>
-
-        <span class="data-label">UEI:</span>
-        <span class="data-value">QZKLH6NJ6ET7</span>
-
-        <span class="data-label">Socioeconomic:</span>
-        <span class="data-value">Small Business, Self-Certified SDB</span>
-
-        <span class="data-label">Location:</span>
-        <span class="data-value">Fort Worth, TX 76179</span>
-
-        <span class="data-label">Formed:</span>
-        <span class="data-value">January 2026</span>
+    <article class="product">
+      <div class="product__media-col">
+        <div class="product__thumb"><img src="img/aperture-cad-iso.jpg" alt="Aperture imaging chain CAD render" loading="lazy"></div>
+        <div class="product__model">APERTURE-IS-1</div>
       </div>
-    </section>
+      <div class="product__name-col">
+        <h3 class="product__name">Aperture</h3>
+        <div class="product__kind">Radiographic Imaging System</div>
+      </div>
+      <div class="product__desc-col">
+        <p class="product__desc">The digital imaging chain for radiographic inspection. Drops into an existing cabinet or pairs with one you source separately. Born digital, no film.</p>
+        <p class="product__note">◊ Cabinet and X-ray source customer-supplied.</p>
+      </div>
+      <dl class="product__specs">
+        <div class="product__spec-line"><span class="k">Target price</span><span class="v">&lt; $3.5K</span></div>
+        <div class="product__spec-line"><span class="k">Sensor</span><span class="v">1440×1080 · 10b</span></div>
+        <div class="product__spec-line"><span class="k">Shutter</span><span class="v">Global</span></div>
+        <div class="product__spec-line"><span class="k">Detector</span><span class="v">IMX296</span></div>
+      </dl>
+      <div class="product__ctas">
+        <a class="btn btn--primary" href="#interest" data-preselect="aperture">Design partners <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#" data-open-updates data-product="aperture">Keep me posted</a>
+      </div>
+    </article>
 
-    <section class="experience">
-      <h2 class="section-label">Experience</h2>
-      <p class="experience-intro">NADCAP Heat Treat, Fluorescent Penetrant Inspection, and Film Radiography Inspection supplier for:</p>
-      <ul class="bullets">
-        <li><strong>F-35</strong></li>
-        <li><strong>F-16</strong></li>
-        <li><strong>Bell Helicopter</strong></li>
-        <li><strong>Sikorsky</strong></li>
-        <li><strong>Gulfstream</strong></li>
-        <li><strong>Honeywell</strong></li>
-        <li><strong>Collins Aerospace</strong></li>
-        <li><strong>Hartzell &mdash; U.S. Army aviation propeller program</strong></li>
-      </ul>
-    </section>
+    <article class="product">
+      <div class="product__media-col">
+        <div class="product__thumb"><img class="warm" src="img/pulse-02.jpg" alt="PyroMesh Pulse breadboard prototype" loading="lazy"></div>
+        <div class="product__model">PULSE-PYR-1</div>
+      </div>
+      <div class="product__name-col">
+        <h3 class="product__name">PyroMesh Pulse</h3>
+        <div class="product__kind">Pyrometry Hardware</div>
+      </div>
+      <div class="product__desc-col">
+        <p class="product__desc">A small networked sensor node for thermocouple data. Publishes to MQTT5 over Wi-Fi. Buffers through dropouts, holds time across power events. Reliable pyrometry on a standard bus.</p>
+        <p class="product__note">◊ Custom PCB pending. Thermocouples and recording software customer-supplied.</p>
+      </div>
+      <dl class="product__specs">
+        <div class="product__spec-line"><span class="k">Target price</span><span class="v">&lt; $500</span></div>
+        <div class="product__spec-line"><span class="k">Inputs</span><span class="v">5× T/C</span></div>
+        <div class="product__spec-line"><span class="k">Firmware</span><span class="v">Zephyr</span></div>
+        <div class="product__spec-line"><span class="k">Bus</span><span class="v">MQTT5 / Wi-Fi</span></div>
+      </dl>
+      <div class="product__ctas">
+        <a class="btn btn--primary" href="#interest" data-preselect="pulse">Design partners <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#" data-open-updates data-product="pulse">Keep me posted</a>
+      </div>
+    </article>
+
+    <article class="product">
+      <div class="product__media-col">
+        <div class="product__thumb"><img src="img/pyromesh-console.jpg" alt="PyroMesh console screenshot" loading="lazy"></div>
+        <div class="product__model">PYROMESH-SW-1</div>
+      </div>
+      <div class="product__name-col">
+        <h3 class="product__name">PyroMesh</h3>
+        <div class="product__kind">Pyrometry DAQ Suite</div>
+      </div>
+      <div class="product__desc-col">
+        <p class="product__desc">A service-oriented pyrometry DAQ. Ingest, persist, dashboard, alert, out of the box. Compliance modules attach per asset, AMS2750 first.</p>
+      </div>
+      <dl class="product__specs">
+        <div class="product__spec-line"><span class="k">Pricing</span><span class="v">Requirements-based</span></div>
+        <div class="product__spec-line"><span class="k">Deployment</span><span class="v">On-site or cloud</span></div>
+        <div class="product__spec-line"><span class="k">Access</span><span class="v">Browser-based</span></div>
+        <div class="product__spec-line"><span class="k">Protocol</span><span class="v">MQTT5 (open)</span></div>
+      </dl>
+      <div class="product__ctas">
+        <a class="btn btn--primary" href="#interest" data-preselect="pyromesh">Design partners <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#" data-open-updates data-product="pyromesh">Keep me posted</a>
+      </div>
+    </article>
+
+    <article class="product">
+      <div class="product__media-col">
+        <div class="product__thumb"><img src="img/pyromesh-traveler.jpg" alt="Digital Provenance traveler record" loading="lazy"></div>
+        <div class="product__model">DPR-1</div>
+      </div>
+      <div class="product__name-col">
+        <h3 class="product__name">Digital Provenance</h3>
+        <div class="product__kind">Verifiable Records &amp; Chain-of-Custody</div>
+      </div>
+      <div class="product__desc-col">
+        <p class="product__desc">Verifiable records, custody, and certificates for industrial work. Hash-chained events, externally witnessed, hardware-signed by qualified personnel, scannable from a phone camera. Reference implementation of open specifications we&rsquo;re authoring.</p>
+        <p class="product__note">◊ Built on open specifications we&rsquo;re authoring.</p>
+      </div>
+      <dl class="product__specs">
+        <div class="product__spec-line"><span class="k">Records</span><span class="v">Hash-chained</span></div>
+        <div class="product__spec-line"><span class="k">Witnessing</span><span class="v">External, stateless</span></div>
+        <div class="product__spec-line"><span class="k">Identity</span><span class="v">FIDO2 / PIV</span></div>
+        <div class="product__spec-line"><span class="k">Certificates</span><span class="v">Signed JWT</span></div>
+      </dl>
+      <div class="product__ctas">
+        <a class="btn btn--primary" href="#interest" data-preselect="provenance">Design partners <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#" data-open-updates data-product="provenance">Keep me posted</a>
+      </div>
+    </article>
   </div>
 
-</main>
+  <p class="section__footnote">◊ Each product can be purchased and operated independently. Buy one, two, or all four.</p>
+</section>
 
-<footer class="footer-band">
-  <div class="footer-contact">
-    <strong>Justin Baker</strong>, CEO<br>
-    WolfMind Industries LLC<br>
-    <a href="mailto:justin@wolfmind.io">justin@wolfmind.io</a>
+<!-- §02 APPROACH -->
+<section class="section" id="approach" aria-labelledby="approach-title">
+  <div class="section__header">
+    <div class="section__num">§ 02 · Approach</div>
+    <div>
+      <h2 class="section__title" id="approach-title">
+        The physics are mature. The components are available. What&rsquo;s missing is the resolve to integrate them.
+      </h2>
+    </div>
   </div>
-  <div class="footer-right">
-    <div class="footer-url">wolfmind.io</div>
-    <div class="footer-tagline">Better. Cheaper. Everywhere.</div>
+  <div class="thesis-grid">
+    <div>
+      <blockquote class="thesis-quote">
+        &ldquo;The problem is not a shortage of technology. The problem is that the industry&rsquo;s delivery model, proprietary, expensive, centralized, cannot provide distributed, affordable capability at the scale the supply chain requires.&rdquo;
+      </blockquote>
+      <div class="thesis-body">
+        <p>
+          Domestic casting and forging capacity has contracted by roughly <span class="accent-num">80%</span> over two decades. Twelve commercial heat treaters closed in the past year alone. The standard responses, consolidation and expensive proprietary equipment, make the supply chain more efficient on paper and more fragile in practice.
+        </p>
+        <p>
+          The components to fix this exist. Off-the-shelf X-ray sources. Commodity sensors. Open compliance specifications. The integration work is hard but it isn&rsquo;t <em>new</em>. It just isn&rsquo;t anyone&rsquo;s job.
+        </p>
+        <p class="closer">WolfMind made it ours.</p>
+      </div>
+    </div>
+    <aside class="operating-panel" aria-label="Operating principle">
+      <div class="operating-panel__header">
+        <span class="operating-panel__tag">◊ Operating principle</span>
+        <span class="operating-panel__meta">WMI · Internal doctrine</span>
+      </div>
+      <div class="operating-panel__body">
+        <p>
+          Every system in industrial inspection costs what it costs because somebody decided it was complicated enough to charge for. That decision compounds. The vendor who chose proprietary protocols in 1995 is the reason a 2025 furnace controller costs forty thousand dollars. The vendor who licensed image-processing per-seat in 2008 is the reason a 2025 X-ray cabinet ships with a ten-thousand-dollar PC welded to its side.
+        </p>
+        <p class="operating-panel__pivot">
+          The honest version of &ldquo;this is hard&rdquo; is usually &ldquo;nobody bothered.&rdquo;
+        </p>
+        <p>
+          We bother. We read the standards. We buy the components. We write the firmware. We pay for the certifications. We deliver the equipment in a crate. The work is genuinely difficult. It is also genuinely tractable. The premise of WolfMind is that the gap between those two things, <em>difficult</em> and <em>impossible</em>, is where almost everything worth building lives.
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- §03 PROTOTYPE -->
+<section class="section" id="prototype" aria-labelledby="prototype-title">
+  <div class="section__header">
+    <div class="section__num">§ 03 · Prototype · Apr 2026</div>
+    <div>
+      <h2 class="section__title" id="prototype-title">
+        Aperture imaged production aluminum castings in real time. The thesis is hardware now.
+      </h2>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat__label">Aperture imaging system</div>
+      <div class="stat__num">&lt; $4,000</div>
+      <p class="stat__caption">Camera, scintillator, optics, mirror, mounting, integration. The full imaging chain. Cabinet and X-ray source customer-supplied. Comparable turnkey systems run $150,000 to $300,000.</p>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Camera + compute</div>
+      <div class="stat__num">$75</div>
+      <p class="stat__caption">Pi 5 + IMX296 global-shutter sensor. Replaces an $800+ industrial camera and the workstation it normally needs.</p>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Time to develop</div>
+      <div class="stat__num">&lt; 1 sec</div>
+      <p class="stat__caption">16 frames averaged at 30 fps, then displayed. Film radiography exposes for minutes and develops in chemistry for ten more. Aperture exposes, develops, and displays in real time.</p>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Consumables per image</div>
+      <div class="stat__num">$0</div>
+      <p class="stat__caption">No film, no developer chemistry, no imaging plates to replace. The scintillator screen has no mechanical wear. The camera has no consumable parts. Per-image cost is electricity.</p>
+    </div>
+  </div>
+
+  <div class="contact-sheet">
+    <figure class="contact-cell">
+      <img src="img/iqi-16-square.jpg" alt="IQI radiograph at 16 mA tube current, April 2026" loading="lazy">
+      <figcaption class="contact-cell__label">IQI · LIVE CAPTURE · APR 2026</figcaption>
+    </figure>
+    <figure class="contact-cell">
+      <img src="img/aperture-bench-iqi-square.jpg" alt="Aperture imaging cage with IQI plaque on step-wedge" loading="lazy">
+      <figcaption class="contact-cell__label">CAGE · IQI ON STEP-WEDGE</figcaption>
+    </figure>
+    <figure class="contact-cell">
+      <img src="img/aperture-bench-wide-square.jpg" alt="Aperture imaging cage with 45° mirror" loading="lazy">
+      <figcaption class="contact-cell__label">CAGE · 45° MIRROR</figcaption>
+    </figure>
+    <figure class="contact-cell">
+      <img src="img/aperture-bench-vault-square.jpg" alt="X-ray vault with overhead tube" loading="lazy">
+      <figcaption class="contact-cell__label">VAULT · OVERHEAD TUBE</figcaption>
+    </figure>
+  </div>
+  <p class="section__footnote">◊ APERTURE-IS-1 · Imaging cage bringup at the prototype vault, April 2026. The cage holds the part, the scintillator, and a 45° mirror that folds the optical path out of the X-ray cone toward the camera.</p>
+</section>
+
+<!-- §04 LINEAGE -->
+<section class="section" id="lineage" aria-labelledby="lineage-title">
+  <div class="section__header">
+    <div class="section__num">§ 04 · Lineage</div>
+    <div>
+      <h2 class="section__title" id="lineage-title">
+        Three generations of NDT practice in the Fort Worth aerospace supply chain. The team carrying the work forward is part of the same supply chain, not new entrants studying it from outside.
+      </h2>
+    </div>
+  </div>
+
+  <div class="lineage-grid">
+    <article class="lineage-card">
+      <div class="lineage-card__role">Founder</div>
+      <div class="lineage-card__name">Justin Baker</div>
+      <p class="lineage-card__bio">Trained in fluorescent penetrant and radiographic inspection at Centex Lab. Nineteen years building web applications, the last fourteen on distributed systems. Hands-on participation in NADCAP audits; direct working relationships with quality organizations at Honeywell, Bell, Lockheed Martin, and Boeing.</p>
+    </article>
+    <article class="lineage-card">
+      <div class="lineage-card__role">Operations</div>
+      <div class="lineage-card__name">Brittany Rohrbach</div>
+      <p class="lineage-card__bio">Third generation. Eighteen years running day-to-day production, customer coordination, and compliance documentation at Centex Lab. Embedded in the lab&rsquo;s NDT and heat-treating workflow across two decades of NADCAP-accredited work for aerospace primes.</p>
+    </article>
+  </div>
+
+  <div class="lineage-callout">
+    <div class="lineage-callout__head">Three generations in the Fort Worth aerospace corridor.</div>
+    <p>Ted Riley began radiographic inspection in Fort Worth in the early 1950s and practiced continuously into his late seventies. The lab he co-founded ran NDT and heat treating for the aerospace primes operating out of the corridor across four decades. Justin Baker is the third generation. Continuity of practice at this depth is a dwindling resource in the industry.</p>
+    <div class="lineage-callout__meta">◊ FORT WORTH AEROSPACE CORRIDOR · 1953 → PRESENT</div>
+  </div>
+</section>
+
+<!-- §05 ENGAGEMENT -->
+<section class="engagement" id="interest" aria-labelledby="engagement-title">
+  <div>
+    <div class="engagement__eyebrow">§ 05 · Engagement</div>
+    <h2 class="engagement__title" id="engagement-title">Design-partner<br>cohort,<br>2026.</h2>
+    <p class="engagement__body">
+      We&rsquo;re selecting a small group of foundries, heat-treaters, and inspection houses to deploy early units of Aperture, Pulse, and PyroMesh on real production work. Limited cohort. Direct line to engineering. Pricing reflects partnership, not list.
+    </p>
+    <p class="engagement__body engagement__body--accent">
+      Not ready? <a href="#" data-open-updates>Just keep me posted →</a>
+    </p>
+  </div>
+
+  <form class="form" id="design-partner-form" novalidate>
+    <div>
+      <label class="form__label" for="dp-company">Company</label>
+      <input class="form__input" type="text" id="dp-company" name="company" placeholder="Acme Castings" required autocomplete="organization">
+    </div>
+    <div>
+      <label class="form__label" for="dp-role">Your role</label>
+      <input class="form__input" type="text" id="dp-role" name="role" placeholder="Quality Manager" autocomplete="organization-title">
+    </div>
+    <div>
+      <label class="form__label" for="dp-name">Your name</label>
+      <input class="form__input" type="text" id="dp-name" name="name" placeholder="Jane Smith" autocomplete="name">
+    </div>
+    <div>
+      <label class="form__label" for="dp-email">Email</label>
+      <input class="form__input" type="email" id="dp-email" name="email" placeholder="you@company.com" required autocomplete="email">
+    </div>
+    <div>
+      <span class="form__label" id="dp-interest-label">Interested in <span class="form__label-extra">· select all that apply</span></span>
+      <div class="chips" role="group" aria-labelledby="dp-interest-label" data-interest-chips>
+        <button type="button" class="chip" aria-pressed="true" data-value="aperture">
+          <span class="chip__box" aria-hidden="true"></span>
+          <span class="chip__label">Aperture</span>
+          <span class="chip__kind">Radiographic imaging</span>
+        </button>
+        <button type="button" class="chip" aria-pressed="false" data-value="pulse">
+          <span class="chip__box" aria-hidden="true"></span>
+          <span class="chip__label">PyroMesh Pulse</span>
+          <span class="chip__kind">Pyrometry hardware</span>
+        </button>
+        <button type="button" class="chip" aria-pressed="false" data-value="pyromesh">
+          <span class="chip__box" aria-hidden="true"></span>
+          <span class="chip__label">PyroMesh</span>
+          <span class="chip__kind">Pyrometry software</span>
+        </button>
+        <button type="button" class="chip" aria-pressed="false" data-value="provenance">
+          <span class="chip__box" aria-hidden="true"></span>
+          <span class="chip__label">Digital Provenance</span>
+          <span class="chip__kind">Records · chain-of-custody</span>
+        </button>
+      </div>
+      <input type="hidden" name="interest" value="aperture">
+    </div>
+    <div>
+      <label class="form__label" for="dp-notes">Anything we should know <span class="form__label-extra">· optional</span></label>
+      <textarea class="form__textarea" id="dp-notes" name="notes" placeholder="Production volume, current vendors, timing…"></textarea>
+    </div>
+    <button type="submit" class="form__submit">
+      <span>Apply to design-partner cohort</span><span aria-hidden="true">→</span>
+    </button>
+    <p class="form__status" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<!-- KEEP ME POSTED · modal -->
+<dialog class="updates-dialog" id="updates-dialog" aria-labelledby="updates-title">
+  <div class="updates-dialog__inner">
+    <div class="updates-dialog__head">
+      <div>
+        <div class="updates-dialog__eyebrow">◊ Updates</div>
+        <h2 class="updates-dialog__title" id="updates-title">Keep me posted.</h2>
+        <p class="updates-dialog__body">Not ready to deploy. We&rsquo;ll send a short note when there&rsquo;s real news — first units, public benchmarks, open specifications. No newsletter spam.</p>
+      </div>
+      <button type="button" class="updates-dialog__close" data-close-updates aria-label="Close">×</button>
+    </div>
+    <form class="updates-form" id="keep-posted-form" novalidate>
+      <input class="form__input" type="email" name="email" placeholder="you@company.com" aria-label="Email" required autocomplete="email">
+      <button type="submit" class="form__submit"><span>Subscribe</span><span aria-hidden="true">→</span></button>
+      <fieldset class="updates-form__select">
+        <legend>About · optional</legend>
+        <div class="updates-form__select-grid">
+          <label><input type="checkbox" name="product" value="aperture"> Aperture</label>
+          <label><input type="checkbox" name="product" value="pulse"> Pulse</label>
+          <label><input type="checkbox" name="product" value="pyromesh"> PyroMesh</label>
+          <label><input type="checkbox" name="product" value="provenance"> Provenance</label>
+        </div>
+      </fieldset>
+      <p class="form__status" role="status" aria-live="polite" style="grid-column:1/-1"></p>
+    </form>
+  </div>
+</dialog>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__brand">
+    <img src="assets/wordmark-horizontal-onDark.svg" alt="WolfMind Industries">
+    <div class="tag">Better. Cheaper. Everywhere.</div>
+    <div class="legal">
+      WOLFMIND INDUSTRIES LLC · FORT WORTH, TX<br>
+      © 2026
+    </div>
+  </div>
+  <div>
+    <div class="footer__col-head">Products</div>
+    <div class="footer__col-list">
+      <a href="#products">Aperture</a>
+      <a href="#products">PyroMesh Pulse</a>
+      <a href="#products">PyroMesh</a>
+      <a href="#products">Digital Provenance</a>
+    </div>
+  </div>
+  <div>
+    <div class="footer__col-head">Company</div>
+    <div class="footer__col-list">
+      <a href="#approach">Approach</a>
+      <a href="#prototype">Prototype</a>
+      <a href="#lineage">Lineage</a>
+      <a href="/assets/WolfMind_Capability_Statement.pdf">Capability statement</a>
+    </div>
+  </div>
+  <div>
+    <div class="footer__col-head">Contact</div>
+    <div class="footer__col-list">
+      <a href="mailto:hello@wolfmind.io">hello@wolfmind.io</a>
+      <span>Fort Worth, TX</span>
+    </div>
   </div>
 </footer>
 
+<script src="assets/app.js" defer></script>
 </body>
 </html>
