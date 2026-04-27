@@ -3,3 +3,5 @@
 .idea/
 node_modules/
 *.log
+worker/.wrangler/
+worker/.dev.vars

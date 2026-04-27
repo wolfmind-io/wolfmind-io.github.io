@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wolfmind-forms",
+  "main": "src/index.js",
+  "compatibility_date": "2026-04-01",
+  "account_id": "b32969d3d53fced4ebf30b6559a6689b",
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "forms.wolfmind.io", "custom_domain": true }
+  ]
+}
